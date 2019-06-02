@@ -117,7 +117,7 @@ evmc_bytes32 getCodeHash(evmc_context* _context, evmc_address const* _addr)
 }
 
 size_t copyCode(evmc_context* _context, evmc_address const* _addr, size_t _codeOffset,
-    byte* _bufferData, size_t _bufferSize)
+    CryptoPP::byte* _bufferData, size_t _bufferSize)
 {
     auto& env = static_cast<ExtVMFace&>(*_context);
     Address addr = fromEvmC(*_addr);

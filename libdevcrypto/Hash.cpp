@@ -345,7 +345,7 @@ void MDcompress(uint32_t *MDbuf, uint32_t *X)
 	return;
 }
 
-void MDfinish(uint32_t *MDbuf, byte const *strptr, uint32_t lswlen, uint32_t mswlen)
+void MDfinish(uint32_t *MDbuf, CryptoPP::byte const *strptr, uint32_t lswlen, uint32_t mswlen)
 {
 	unsigned int i;                                 /* counter       */
 	uint32_t        X[16];                             /* message words */
@@ -405,7 +405,7 @@ h160 ripemd160(bytesConstRef _input)
 
 	// initialize
 	rmd160::MDinit(buffer);
-	byte const* message = _input.data();
+	CryptoPP::byte const* message = _input.data();
 	uint32_t remaining = _input.size();	// # of bytes not yet processed
 
 	// process message in 16x 4-byte chunks

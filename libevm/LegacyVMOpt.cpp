@@ -72,7 +72,7 @@ void LegacyVM::optimize()
 		)
 		{
 			TRACE_OP(1, pc, op);
-			m_code[pc] = (byte)Instruction::INVALID;
+			m_code[pc] = (CryptoPP::byte)Instruction::INVALID;
 		}
 
 		if (op == Instruction::JUMPDEST)
@@ -80,11 +80,11 @@ void LegacyVM::optimize()
 			m_jumpDests.push_back(pc);
 		}
 		else if (
-			(byte)Instruction::PUSH1 <= (byte)op &&
-			(byte)op <= (byte)Instruction::PUSH32
+			(CryptoPP::byte)Instruction::PUSH1 <= (CryptoPP::byte)op &&
+			(CryptoPP::byte)op <= (CryptoPP::byte)Instruction::PUSH32
 		)
 		{
-			pc += (byte)op - (byte)Instruction::PUSH1 + 1;
+			pc += (CryptoPP::byte)op - (CryptoPP::byte)Instruction::PUSH1 + 1;
 		}
 #if EIP_615
 		else if (
@@ -119,9 +119,9 @@ void LegacyVM::optimize()
 		u256 val = 0;
 		Instruction op = Instruction(m_code[pc]);
 
-		if ((byte)Instruction::PUSH1 <= (byte)op && (byte)op <= (byte)Instruction::PUSH32)
+		if ((CryptoPP::byte)Instruction::PUSH1 <= (CryptoPP::byte)op && (CryptoPP::byte)op <= (CryptoPP::byte)Instruction::PUSH32)
 		{
-			byte nPush = (byte)op - (byte)Instruction::PUSH1 + 1;
+			CryptoPP::byte nPush = (CryptoPP::byte)op - (CryptoPP::byte)Instruction::PUSH1 + 1;
 
 			// decode pushed bytes to integral value
 			val = m_code[pc+1];
@@ -142,7 +142,7 @@ void LegacyVM::optimize()
 				m_pool.push_back(val);
 
 				TRACE_PRE_OPT(1, pc, op);
-				m_code[pc] = byte(op = Instruction::PUSHC);
+				m_code[pc] = CryptoPP::byte(op = Instruction::PUSHC);
 				m_code[pc+3] = nPush - 2;
 				m_code[pc+2] = pool_off & 0xff;
 				m_code[pc+1] = pool_off >> 8;
@@ -164,7 +164,7 @@ void LegacyVM::optimize()
 				TRACE_PRE_OPT(1, i, op);
 				
 				if (0 <= verifyJumpDest(val, false))
-					m_code[i] = byte(op = Instruction::JUMPC);
+					m_code[i] = CryptoPP::byte(op = Instruction::JUMPC);
 				
 				TRACE_POST_OPT(1, i, op);
 			}
@@ -174,7 +174,7 @@ void LegacyVM::optimize()
 				TRACE_PRE_OPT(1, i, op);
 				
 				if (0 <= verifyJumpDest(val, false))
-					m_code[i] = byte(op = Instruction::JUMPCI);
+					m_code[i] = CryptoPP::byte(op = Instruction::JUMPCI);
 				
 				TRACE_POST_OPT(1, i, op);
 			}

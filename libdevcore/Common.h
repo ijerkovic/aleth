@@ -54,7 +54,7 @@
 #include "vector_ref.h"
 
 // CryptoPP defines byte in the global namespace, so must we.
-using byte = uint8_t;
+#include <cryptopp/config.h>
 
 #define DEV_IGNORE_EXCEPTIONS(X) try { X; } catch (...) {}
 
@@ -69,9 +69,9 @@ extern char const* Version;
 extern std::string const EmptyString;
 
 // Binary data types.
-using bytes = std::vector<byte>;
-using bytesRef = vector_ref<byte>;
-using bytesConstRef = vector_ref<byte const>;
+using bytes = std::vector<CryptoPP::byte>;
+using bytesRef = vector_ref<CryptoPP::byte>;
+using bytesConstRef = vector_ref<CryptoPP::byte const>;
 
 template <class T>
 class secure_vector
@@ -112,7 +112,7 @@ private:
     std::vector<T> m_data;
 };
 
-using bytesSec = secure_vector<byte>;
+using bytesSec = secure_vector<CryptoPP::byte>;
 
 // Numeric types.
 using bigint = boost::multiprecision::number<boost::multiprecision::cpp_int_backend<>>;

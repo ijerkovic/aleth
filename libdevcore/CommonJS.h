@@ -25,7 +25,7 @@
 
 namespace dev
 {
-inline std::string toJS(byte _b)
+inline std::string toJS(CryptoPP::byte _b)
 {
     return "0x" + std::to_string(_b);
 }

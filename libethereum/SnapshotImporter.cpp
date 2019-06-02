@@ -107,7 +107,7 @@ void SnapshotImporter::importStateChunks(SnapshotStorageFace const& _snapshotSto
                 storageMap.emplace(keyHash, std::move(value));
             }
 
-            byte const codeFlag = account[2].toInt<byte>(RLP::VeryStrict);
+            CryptoPP::byte const codeFlag = account[2].toInt<CryptoPP::byte>(RLP::VeryStrict);
             h256 codeHash;
             switch (codeFlag)
             {

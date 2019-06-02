@@ -50,7 +50,7 @@ class TransactionQueue;
 class EthereumCapability;
 class EthereumPeer;
 
-enum EthSubprotocolPacketType : byte
+enum EthSubprotocolPacketType : CryptoPP::byte
 {
     StatusPacket = 0x00,
     NewBlockHashesPacket = 0x01,

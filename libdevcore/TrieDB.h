@@ -130,7 +130,7 @@ public:
         {
             std::string rlp;
             std::string key;		// as hexPrefixEncoding.
-            byte child;				// 255 -> entering, 16 -> actually at the node, 17 -> exiting, 0-15 -> actual children.
+            CryptoPP::byte child;				// 255 -> entering, 16 -> actually at the node, 17 -> exiting, 0-15 -> actual children.
 
             // 255 -> 16 -> 0 -> 1 -> ... -> 15 -> 17
 
@@ -269,7 +269,7 @@ private:
     // in: [V0, ... V15, S] (DEL)
     // out1: [k{i}, Vi]    where i < 16
     // out2: [k{}, S]      where i == 16
-    bytes merge(RLP const& _orig, byte _i);
+    bytes merge(RLP const& _orig, CryptoPP::byte _i);
 
     // in: [k{}, S] (DEL)
     // out: [null ** 16, S]
@@ -325,11 +325,11 @@ public:
 
     std::string operator[](KeyType _k) const { return at(_k); }
 
-    bool contains(KeyType _k) const { return Generic::contains(bytesConstRef((byte const*)&_k, sizeof(KeyType))); }
-    std::string at(KeyType _k) const { return Generic::at(bytesConstRef((byte const*)&_k, sizeof(KeyType))); }
-    void insert(KeyType _k, bytesConstRef _value) { Generic::insert(bytesConstRef((byte const*)&_k, sizeof(KeyType)), _value); }
+    bool contains(KeyType _k) const { return Generic::contains(bytesConstRef((CryptoPP::byte const*)&_k, sizeof(KeyType))); }
+    std::string at(KeyType _k) const { return Generic::at(bytesConstRef((CryptoPP::byte const*)&_k, sizeof(KeyType))); }
+    void insert(KeyType _k, bytesConstRef _value) { Generic::insert(bytesConstRef((CryptoPP::byte const*)&_k, sizeof(KeyType)), _value); }
     void insert(KeyType _k, bytes const& _value) { insert(_k, bytesConstRef(&_value)); }
-    void remove(KeyType _k) { Generic::remove(bytesConstRef((byte const*)&_k, sizeof(KeyType))); }
+    void remove(KeyType _k) { Generic::remove(bytesConstRef((CryptoPP::byte const*)&_k, sizeof(KeyType))); }
 
     class iterator: public Generic::iterator
     {
@@ -349,7 +349,7 @@ public:
 
     iterator begin() const { return this; }
     iterator end() const { return iterator(); }
-    iterator lower_bound(KeyType _k) const { return iterator(this, bytesConstRef((byte const*)&_k, sizeof(KeyType))); }
+    iterator lower_bound(KeyType _k) const { return iterator(this, bytesConstRef((CryptoPP::byte const*)&_k, sizeof(KeyType))); }
 };
 
 template <class Generic, class KeyType>
@@ -890,9 +890,9 @@ template <class DB> bytes GenericTrieDB<DB>::mergeAt(RLP const& _orig, h256 cons
             killNode(_orig, _origHash);
 
         // not exactly our node - delve to next level at the correct index.
-        byte n = _k[0];
+        CryptoPP::byte n = _k[0];
         RLPStream r(17);
-        for (byte i = 0; i < 17; ++i)
+        for (CryptoPP::byte i = 0; i < 17; ++i)
             if (i == n)
                 mergeAtAux(r, _orig[i], _k.mid(1), _v);
             else
@@ -994,7 +994,7 @@ template <class DB> bytes GenericTrieDB<DB>::deleteAt(RLP const& _orig, NibbleSl
             // Kill the node.
             killNode(_orig);
 
-            byte used = uniqueInUse(_orig, 16);
+            CryptoPP::byte used = uniqueInUse(_orig, 16);
             if (used != 255)
                 if (isTwoItemNode(_orig[used]))
                 {
@@ -1006,7 +1006,7 @@ template <class DB> bytes GenericTrieDB<DB>::deleteAt(RLP const& _orig, NibbleSl
             else
             {
                 RLPStream r(17);
-                for (byte i = 0; i < 16; ++i)
+                for (CryptoPP::byte i = 0; i < 16; ++i)
                     r << _orig[i];
                 r << "";
                 return r.out();
@@ -1016,8 +1016,8 @@ template <class DB> bytes GenericTrieDB<DB>::deleteAt(RLP const& _orig, NibbleSl
         {
             // not exactly our node - delve to next level at the correct index.
             RLPStream r(17);
-            byte n = _k[0];
-            for (byte i = 0; i < 17; ++i)
+            CryptoPP::byte n = _k[0];
+            for (CryptoPP::byte i = 0; i < 17; ++i)
                 if (i == n)
                 {
                     if (!deleteAtAux(r, _orig[i], _k.mid(1)))	// bomb out if the key didn't turn up.
@@ -1031,7 +1031,7 @@ template <class DB> bytes GenericTrieDB<DB>::deleteAt(RLP const& _orig, NibbleSl
 
             // check if we ended up leaving the node invalid.
             RLP rlp(r.out());
-            byte used = uniqueInUse(rlp, 255);
+            CryptoPP::byte used = uniqueInUse(rlp, 255);
             if (used == 255)	// no - all ok.
                 return r.out();
 
@@ -1149,7 +1149,7 @@ template <class DB> bytes GenericTrieDB<DB>::graft(RLP const& _orig)
 //	return ret;
 }
 
-template <class DB> bytes GenericTrieDB<DB>::merge(RLP const& _orig, byte _i)
+template <class DB> bytes GenericTrieDB<DB>::merge(RLP const& _orig, CryptoPP::byte _i)
 {
     assert(_orig.isList() && _orig.itemCount() == 17);
     RLPStream s(2);
@@ -1180,7 +1180,7 @@ template <class DB> bytes GenericTrieDB<DB>::branch(RLP const& _orig)
     }
     else
     {
-        byte b = k[0];
+        CryptoPP::byte b = k[0];
         for (unsigned i = 0; i < 16; ++i)
             if (i == b)
                 if (isLeaf(_orig) || k.size() > 1)

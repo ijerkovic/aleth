@@ -72,7 +72,7 @@ std::string hexPrefixEncode(bytesConstRef _data, bool _leaf, int _beginNibble, i
 	unsigned d = odd ? 1 : 2;
 	for (auto i = begin; i < end; ++i, ++d)
 	{
-		byte n = nibble(_data, i);
+		CryptoPP::byte n = nibble(_data, i);
 		if (d & 1)	// odd
 			ret.back() |= n;		// or the nibble onto the back
 		else
@@ -96,7 +96,7 @@ std::string hexPrefixEncode(bytesConstRef _d1, unsigned _o1, bytesConstRef _d2, 
 	unsigned d = odd ? 1 : 2;
 	for (auto i = begin1; i < end1; ++i, ++d)
 	{
-		byte n = nibble(_d1, i);
+		CryptoPP::byte n = nibble(_d1, i);
 		if (d & 1)	// odd
 			ret.back() |= n;		// or the nibble onto the back
 		else
@@ -104,7 +104,7 @@ std::string hexPrefixEncode(bytesConstRef _d1, unsigned _o1, bytesConstRef _d2, 
 	}
 	for (auto i = begin2; i < end2; ++i, ++d)
 	{
-		byte n = nibble(_d2, i);
+		CryptoPP::byte n = nibble(_d2, i);
 		if (d & 1)	// odd
 			ret.back() |= n;		// or the nibble onto the back
 		else
@@ -113,14 +113,14 @@ std::string hexPrefixEncode(bytesConstRef _d1, unsigned _o1, bytesConstRef _d2, 
 	return ret;
 }
 
-byte uniqueInUse(RLP const& _orig, byte except)
+ CryptoPP::byte uniqueInUse(RLP const& _orig, CryptoPP::byte except)
 {
-	byte used = 255;
+	CryptoPP::byte used = 255;
 	for (unsigned i = 0; i < 17; ++i)
 		if (i != except && !_orig[i].isEmpty())
 		{
 			if (used == 255)
-				used = (byte)i;
+				used = (CryptoPP::byte)i;
 			else
 				return 255;
 		}

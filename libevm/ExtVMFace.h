@@ -54,7 +54,7 @@ namespace eth
 /// with it was moved out of VM interface making VMs "stateless".
 ///
 /// The type is movable, but not copyable. Default constructor available.
-class owning_bytes_ref: public vector_ref<byte const>
+class owning_bytes_ref: public vector_ref<CryptoPP::byte const>
 {
 public:
     owning_bytes_ref() = default;

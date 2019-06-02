@@ -153,7 +153,7 @@ S modWorkaround(S const& _a, S const& _b)
 // for decoding destinations of JUMPTO, JUMPV, JUMPSUB and JUMPSUBV
 //
 
-uint64_t VM::decodeJumpDest(const byte* const _code, uint64_t& _pc)
+uint64_t VM::decodeJumpDest(const CryptoPP::byte* const _code, uint64_t& _pc)
 {
     // turn 2 MSB-first bytes in the code into a native-order integer
     uint64_t dest      = _code[_pc++];
@@ -161,7 +161,7 @@ uint64_t VM::decodeJumpDest(const byte* const _code, uint64_t& _pc)
     return dest;
 }
 
-uint64_t VM::decodeJumpvDest(const byte* const _code, uint64_t& _pc, byte _voff)
+uint64_t VM::decodeJumpvDest(const CryptoPP::byte* const _code, uint64_t& _pc, CryptoPP::byte _voff)
 {
     // Layout of jump table in bytecode...
     //     byte opcode
@@ -169,7 +169,7 @@ uint64_t VM::decodeJumpvDest(const byte* const _code, uint64_t& _pc, byte _voff)
     //     byte table[n_jumps][2]
     //
     uint64_t pc = _pc;
-    byte n = _code[++pc];           // byte after opcode is number of jumps
+    CryptoPP::byte n = _code[++pc];           // byte after opcode is number of jumps
     if (_voff >= n) _voff = n - 1;  // if offset overflows use default jump
     pc += _voff * 2;                // adjust inout pc before index destination in table
 
@@ -430,7 +430,7 @@ void VM::interpretCases()
             updateMem(toInt63(m_SP[0]) + 1);
             updateIOGas();
 
-            m_mem[(unsigned)m_SP[0]] = (byte)(m_SP[1] & 0xff);
+            m_mem[(unsigned)m_SP[0]] = (CryptoPP::byte)(m_SP[1] & 0xff);
         }
         NEXT
 

@@ -16,7 +16,7 @@ class SnapshotStorageFace;
 
 constexpr unsigned c_WarpProtocolVersion = 1;
 
-enum WarpSubprotocolPacketType : byte
+enum WarpSubprotocolPacketType : CryptoPP::byte
 {
     WarpStatusPacket = 0x00,
     GetSnapshotManifestPacket = 0x11,

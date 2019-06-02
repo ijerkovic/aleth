@@ -31,13 +31,13 @@ bytes addressToRlpBytes(Address const& _address)
 }
 
 template <std::size_t N>
-std::array<byte, N> rlpToAddressByteArray(RLP const& _rlp)
+std::array<CryptoPP::byte, N> rlpToAddressByteArray(RLP const& _rlp)
 {
     auto const data = _rlp.toBytesConstRef();
     if (data.size() != N)
         BOOST_THROW_EXCEPTION(ENRInvalidAddress());
 
-    std::array<byte, N> arr;
+    std::array<CryptoPP::byte, N> arr;
     std::copy_n(data.begin(), N, arr.begin());
     return arr;
 }
