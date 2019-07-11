@@ -142,6 +142,7 @@ struct CallParameters
 class EnvInfo
 {
 public:
+    EnvInfo() {}
     EnvInfo(BlockHeader const& _current, LastBlockHashesFace const& _lh, u256 const& _gasUsed):
         m_headerInfo(_current),
         m_lastHashes(_lh),
